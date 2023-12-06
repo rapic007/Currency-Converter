@@ -2,10 +2,12 @@ import UIKit
 
 class MainScreenView: UIView {
     
-    private(set) var currency: Currency!
     
     let moneyTextField = CustomTextField()
-    let convertButton = UIButton()
+    let officialRateLabel = CustomLabel()
+    var changeLabel = CustomLabel()
+    
+    var onEditingChanged: (() -> Void)?
     
     
     override init(frame: CGRect) {
@@ -22,51 +24,34 @@ class MainScreenView: UIView {
         
         moneyTextField.isCanPaste = false
         moneyTextField.padding = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 30)
-        moneyTextField.placeholder = "Введите сумму"
+        moneyTextField.placeholder = "Введите сумму в BYN"
         moneyTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
-        
-        convertButton.setTitle("Обменять", for: .normal)
-        convertButton.setTitleColor(.white, for: .normal)
-        convertButton.setTitleColor(.black, for: .highlighted)
-        convertButton.layer.backgroundColor = UIColor.lightGray.cgColor
-        convertButton.layer.cornerRadius = 22
-        convertButton.translatesAutoresizingMaskIntoConstraints = false
-        convertButton.isHidden = true
-        
-        
-        convertButton.addTarget(self, action: #selector(convertButtonTapped), for: .touchUpInside)
+        moneyTextField.keyboardType = .decimalPad
         
         self.addSubview(moneyTextField)
-        self.addSubview(convertButton)
+        self.addSubview(officialRateLabel)
+        self.addSubview(changeLabel)
         
         NSLayoutConstraint.activate([
-            moneyTextField.topAnchor.constraint(equalTo: self.topAnchor, constant: 100),
+            moneyTextField.topAnchor.constraint(equalTo: self.topAnchor, constant: 300),
             moneyTextField.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             moneyTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
             moneyTextField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
             moneyTextField.heightAnchor.constraint(equalToConstant: 44),
             
-            convertButton.topAnchor.constraint(equalTo: moneyTextField.bottomAnchor, constant: 200 ),
-            convertButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            convertButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 30),
-            convertButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -30),
-            convertButton.heightAnchor.constraint(equalToConstant: 44)
+            
+            officialRateLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 100),
+            officialRateLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
+            officialRateLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
+            
+            changeLabel.topAnchor.constraint(equalTo: officialRateLabel.bottomAnchor, constant: 50),
+            changeLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             
         ])
     }
-    
-    @objc
-    func convertButtonTapped() {
-        
-    }
-    
     @objc
     func editingChanged() {
-        if  moneyTextField.text!.isEmpty {
-            convertButton.isHidden = true
-        } else {
-            convertButton.isHidden = false
-        }
+        onEditingChanged?()
     }
 }
 
