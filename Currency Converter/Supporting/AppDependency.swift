@@ -5,7 +5,15 @@ struct AppDependency{
         return NetworkManager()
     }()
     
-    lazy var mainScreenViewModel: MainScreenViewModelProtocol = {
-        return MainScreenViewModel(networkManager: self.networkManager)
+    lazy var dollarScreenViewModel: ScreenViewModelProtocol = {
+        return DollarScreenViewModel(networkManager: self.networkManager)
+    }()
+    
+    lazy var euroScreenViewModel: ScreenViewModelProtocol = {
+        return EuroScreenViewModel(networkManager: self.networkManager)
+    }()
+    
+    lazy var rubleScreenViewModel: ScreenViewModelProtocol = {
+        return RubleScreenViewModel(networkManager: self.networkManager)
     }()
 }

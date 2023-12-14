@@ -1,6 +1,6 @@
 import UIKit
 
-class MainScreenView: UIView {
+class ScreenView: UIView {
     
     
     let moneyTextField = CustomTextField()
